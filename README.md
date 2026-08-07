@@ -11,10 +11,10 @@ Automated Python post-processing for 3D Micro-CT imaging: features 3D majority v
 **Overview:** 
 This repository contains the automated Python pipeline developed during my Erasmus+ Research Internship at INSERM and Université Grenoble Alpes (UGA). The project addresses the challenge of quantifying disease biomarkers in Idiopathic Pulmonary Fibrosis (IPF) using ultra-high-resolution X-ray Phase Contrast Micro-CT imaging.
 
-The core engineering challenge: Processing massive volumetric datasets (>25 GB per scan) that cause standard memory overflows, while eliminating manual, subjective assessment of over 3,000 2D slices per sample.
+The main challenge: Processing massive volumetric datasets (>25 GB per scan) that usually cause memory errors, while eliminating manual, subjective assessment of over 3,000 2D slices per sample.
 
 **Pipeline Architecture:** 
-The pipeline acts as the automated post-processing and quantification engine following a Random Forest tissue classification (via IPSDK / nnInteractive). 
+The pipeline acts as the automated post-processing and quantification procedure following a Random Forest tissue classification (via IPSDK / nnInteractive). 
 
 <p align="center">
   <img src="images/workflow.jpg" width="60%" alt="Pipeline Workflow Chart">
@@ -54,7 +54,7 @@ extraction.
 </p>
          
 **Key Technical Features**
-- RAM-Safe Processing: Code engineered to handle >25GB Micro-CT data efficiently.
+- RAM-Safe Processing: Code capable of handling >25GB Micro-CT data efficiently.
 - Objective Quantification: Replaces subjective manual scoring with highly reproducible volumetric metrics.
 - Medical Data Handling: Adheres to biological context logic (e.g., distinguishing thick blood vessels from true pathological fibrosis).
 
