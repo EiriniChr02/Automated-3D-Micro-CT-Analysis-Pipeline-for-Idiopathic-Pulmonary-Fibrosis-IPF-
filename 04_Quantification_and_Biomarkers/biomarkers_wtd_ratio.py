@@ -8,10 +8,7 @@ import json
 import time
 import gc
 
-# ══════════════════════════════════════════════════════════════
-# SETTINGS (FOR HIGH-RAM WORKSTATIONS & LARGE MICRO-CT STACKS)
-# ══════════════════════════════════════════════════════════════
-# Generic paths for GitHub
+# Define paths
 INPUT_DIR = Path("./data/output")
 REPORT_DIR = Path("./reports")
 REPORT_DIR.mkdir(parents=True, exist_ok=True)
@@ -97,7 +94,7 @@ def run_biomarker_pipeline():
     print("  RAM-SAFE BIOMARKERS EXTRACTION (WT & D RATIO)")
     print("═" * 60)
 
-    # ── 1. Data Loading ──────────────────────────────────────────
+    # 1. Data Loading
     print(f"\n[1/4] Loading Large 3D Volumes into RAM...")
     tree = tifffile.imread(str(TREE_FILE))
     labels = tifffile.imread(str(LABELS_FILE))
@@ -110,7 +107,7 @@ def run_biomarker_pipeline():
     print(f"  -> Volume Shape: {tree.shape}")
     del tree; gc.collect()
 
-    # ── 2. Global Skeletonization ────────────────────────────────
+    # 2. Global Skeletonization
     # Skeletonization MUST be done globally to avoid disconnected network branches
     print(f"\n[2/4] Extracting 3D Skeleton (Centerline)...")
     t0 = time.time()
@@ -118,7 +115,7 @@ def run_biomarker_pipeline():
     print(f"  -> Completed in {(time.time() - t0):.1f}s")
     del air_uint8; gc.collect()
 
-    # ── 3. Chunked Topology Analysis (Bifurcations) ──────────────
+    # 3. Chunked Topology Analysis (Bifurcations)
     print(f"\n[3/4] Calculating Network Topology (Chunked)...")
     starts = list(range(0, z_dim, CHUNK_Z))
     
@@ -132,7 +129,7 @@ def run_biomarker_pipeline():
     
     del topology_results; gc.collect()
 
-    # ── 4. Chunked Distance Transforms (WT & D) ──────────────────
+    # 4. Chunked Distance Transforms (WT & D)
     print(f"\n[4/4] Calculating Wall Thickness & Lumen Diameter (Chunked EDT)...")
     
     metrics_results = Parallel(n_jobs=MAX_THREADS, require='sharedmem')(
@@ -152,7 +149,7 @@ def run_biomarker_pipeline():
     skel_diams_um = skel_diams * 2 * VOXEL_SIZE_UM
     del wt_part1, wt_part2; gc.collect()
 
-    # ── 5. Filtering & Biomarker Extraction ──────────────────────
+    # 5. Filtering & Biomarker Extraction
     print(f"\n[Finalizing] Applying {PERCENTILE_CUTOFF}th Percentile Filter & Exporting...")
     wt_clean = wt_um[wt_um <= np.percentile(wt_um, PERCENTILE_CUTOFF)]
     
@@ -160,7 +157,7 @@ def run_biomarker_pipeline():
     median_d = float(np.median(skel_diams_um))
     wt_d_ratio = median_wt / median_d if median_d > 0 else 0
 
-    # ── 6. Reporting ─────────────────────────────────────────────
+    # 6. Reporting
     report = {
         "bifurcations": n_bif,
         "endpoints": n_end,
