@@ -4,8 +4,7 @@ from pathlib import Path
 import time
 import os
 
-# ── Parameters ────────────────────────────────────────────────
-# Define generic paths for GitHub
+# Define path
 # The Path can be a folder of 2D slices or a single 3D .tif file
 INPUT_PATH = Path("./data/output/03_airway_closed_volume.tif")
 
@@ -21,7 +20,6 @@ LABELS_DICT = {
     3: "Airway Walls",
     4: "Mediastinum"
 }
-# ──────────────────────────────────────────────────────────────
 
 def quantify_all_classes():
     t_start = time.time()
@@ -48,7 +46,7 @@ def quantify_all_classes():
     
     try:
         if is_dir:
-            # ── FOLDER MODE ──
+            # FOLDER MODE
             valid_exts = {'.tif', '.tiff', '.png'}
             slice_files = sorted([f for f in INPUT_PATH.iterdir() if f.is_file() and f.suffix.lower() in valid_exts])
             
@@ -69,7 +67,7 @@ def quantify_all_classes():
                     print(f"      Checked {z}/{z_dim} slices...")
                     
         else:
-            # ── FILE MODE (3D TIF) ──
+            # FILE MODE (3D TIF)
             with tifffile.TiffFile(str(INPUT_PATH)) as tif_in:
                 z_dim = len(tif_in.pages)
                 print(f"  File Mode: Found {z_dim} slices.")
@@ -87,7 +85,7 @@ def quantify_all_classes():
         print(f" [!] Error while reading: {e}")
         return
 
-    # ── Statistics Calculation ──
+    # Statistics Calculation
     print("\n[3/3] Calculating Volumes and Percentages...")
     
     # Total lung tissue ignores the air (Background - Label 0)
@@ -115,7 +113,7 @@ def quantify_all_classes():
 
     print("-" * 50)
     
-    # ── Clinical Statistics (Tissue Only) ──
+    # Clinical Statistics (Tissue Only)
     if total_tissue_voxels > 0:
         print(f"\n  Clinical statistics of the tissue (Excluding Background Air):")
         print(f"     Total Tissue: {(total_tissue_voxels * voxel_vol_mm3):.2f} mm³")
