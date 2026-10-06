@@ -6,10 +6,7 @@ from joblib import Parallel, delayed
 import time
 import gc
 
-# ══════════════════════════════════════════════════════════════
-# SETTINGS & PATHS (OPTIMIZED FOR HIGH-END WORKSTATIONS)
-# ══════════════════════════════════════════════════════════════
-# Define generic paths for GitHub
+# Define paths
 INPUT_DIR = Path("./data/output") 
 OUTPUT_DIR = Path("./data/output")
 
@@ -67,7 +64,7 @@ def run_airway_closing():
     
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     
-    # ── 1. LOADING ──
+    # 1. LOADING
     print(f"\n[1/3] Loading data into RAM from:\n      {INPUT_FILE.name}...")
     try:
         labels = tifffile.imread(str(INPUT_FILE))
@@ -77,7 +74,7 @@ def run_airway_closing():
         print(f" [!] Error loading file: {e}")
         return
 
-    # ── 2. PROCESSING ──
+    # 2. PROCESSING
     print(f"\n[2/3] Airway 3D closing (Enhanced 3D/26-connectivity)...")
     print(f"      Executing with {MAX_THREADS} concurrent cores ({CLOSING_ITERATIONS} iterations)...")
     
@@ -89,7 +86,7 @@ def run_airway_closing():
     )
     gc.collect()
 
-    # ── 3. SAVING ──
+    # 3. SAVING
     print(f"\n[3/3] Saving the massive TIF to disk...\n      {OUTPUT_FILE.name}")
     tifffile.imwrite(str(OUTPUT_FILE), labels, compression='zlib', bigtiff=True)
     
