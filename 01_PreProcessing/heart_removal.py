@@ -5,7 +5,7 @@ import time
 import gc
 
 # ── PARAMETERS ────────────────────────────────────────────────
-# Define generic paths for GitHub (Replace with local paths when running)
+# Define generic paths (Replace with local paths when running)
 INPUT_DIR  = Path("./data/input") 
 OUTPUT_DIR = Path("./data/output")
 
@@ -92,7 +92,7 @@ def remove_heart_memory_safe():
         return
 
     print(f"\n[3/3] File successfully written to disk!")
-    print(f"✓ Completed with ABSOLUTE MEMORY SAFETY in {(time.time() - t_start) / 60:.1f} minutes!")
+    print(f"Completed with memory safety in {(time.time() - t_start) / 60:.1f} minutes!")
     print(f"  The final file is: {OUTPUT_FINAL.name}")
     print("═"*60)
 
