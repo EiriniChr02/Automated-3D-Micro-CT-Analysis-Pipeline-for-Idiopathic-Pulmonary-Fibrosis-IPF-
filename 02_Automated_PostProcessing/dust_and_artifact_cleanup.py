@@ -8,7 +8,7 @@ import gc
 # ══════════════════════════════════════════════════════════════
 # SETTINGS & PATHS
 # ══════════════════════════════════════════════════════════════
-# Define generic paths for GitHub
+# Define paths
 INPUT_DIR = Path("./data/output") 
 OUTPUT_DIR = Path("./data/output")
 
@@ -50,7 +50,7 @@ def run_dust_cleanup():
     
     t_proc = time.time()
     
-    # Process 1 Chunk at a time, but calculations inside are MASSIVELY parallelized via Scipy
+    # Process 1 Chunk at a time, but calculations inside are parallelized via Scipy
     for z_start in range(0, z_dim, CHUNK_Z):
         z_end = min(z_start + CHUNK_Z, z_dim)
         z_s_pad = max(0, z_start - PAD_Z)
@@ -82,7 +82,7 @@ def run_dust_cleanup():
             if num_features == 0:
                 continue
                 
-            # ── SAFE BINCOUNT (Prevents memory overflow on large numbers of features) ──
+            # SAFE BINCOUNT (Prevents memory overflow on large numbers of features)
             sizes = np.zeros(num_features + 1, dtype=np.int64)
             for z_slice in labeled:
                 counts = np.bincount(z_slice.ravel())
@@ -107,7 +107,7 @@ def run_dust_cleanup():
                 small_mask = is_small[labeled]
                 
                 if smart_replace:
-                    # ── VECTORIZED EDT (LIGHTNING-FAST NEIGHBOR SEARCH) ──
+                    # ── VECTORIZED EDT (FAST NEIGHBOR SEARCH) ──
                     # Finds nearest valid neighbor for ALL isolated objects simultaneously!
                     indices = ndimage.distance_transform_edt(small_mask, return_distances=False, return_indices=True)
                     
