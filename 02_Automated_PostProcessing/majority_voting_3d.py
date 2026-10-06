@@ -6,17 +6,14 @@ from joblib import Parallel, delayed
 import time
 import gc
 
-# ══════════════════════════════════════════════════════════════
-# SETTINGS & PATHS
-# ══════════════════════════════════════════════════════════════
-# Define generic paths for GitHub (Replace with local paths when running)
+# Replace with local paths when running
 INPUT_DIR = Path("./data/input/classification_results") 
 OUTPUT_DIR = Path("./data/output")
 
 # Where the final cleaned TIF will be saved
 OUTPUT_FILE = OUTPUT_DIR / "01_majority_voted_volume.tif"
 
-# --- MEMORY OPTIMIZATIONS (IN-PLACE ALLOCATION) ---
+# MEMORY OPTIMIZATIONS (IN-PLACE ALLOCATION)
 CHUNK_SIZE = 20   
 MAX_THREADS = 45  
 MV_SIZE = 3 # 3x3x3 Kernel size for Majority Voting
